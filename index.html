@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .wrap {
+            margin: auto;
+            width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn {
+            width: 200px;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body onload="displayBoard(drawBoard())">
+<div class="wrap">
+    <h1>Tic Tac Toe</h1>
+    <p id="board"></p>
+    <div class="btn">
+        <button id="player1" onclick="turn(0)">Player 1</button>
+        <button id="player2" onclick="turn(1)">Player 2</button>
+    </div>
+</div>
+<script>
+    let board = document.getElementById("board");
+    let play1 = document.getElementById("player1");
+    let play2 = document.getElementById("player2");
+    let str = "";
+    let num = Number(prompt("Nhập tỉ lệ bàn cờ (0x0)"));
+    let arr = [];
+
+    function drawBoard() {
+        for(let i = 0; i<num ;i++) {
+            arr[i] = new Array();
+            for(let j = 0; j<num; j++) {
+                arr[i].push(".");
+            }
+            arr.push(arr[i]);
+        }
+        return arr;
+    }
+
+    function displayBoard(arr) {
+        str = "";
+        for(let i=0; i<num; i++) {
+            for(let j=0; j<num; j++) {
+                str+= arr[i][j] + "&nbsp;&nbsp;&nbsp;&nbsp;";
+            }
+            str+="<br>";
+        }
+        board.innerHTML = str;
+    }
+    function play(x,y,value) {
+        if(arr[x][y] == '.') {
+            arr[x][y] = value;
+            return true;
+        }
+        displayBoard(arr);
+        return false;
+    }
+    function check(turn) {
+        let countX = 0;
+        let countY = 0;
+        for(let i = 0; i < arr.length; i++) {
+            for(let j = 0; j < arr[i].length; j++) {
+                if(arr[i][j] !== ".") {
+                    if(arr[i][j] === "x") {
+                        countX = 1;
+                        if(arr[i+1][j] === "x") {
+                            countX++;
+                            if(arr[i+2][j] === "x") {
+                                countX++;
+                                break;
+                            }
+                        }
+                        if(arr[i][j+1] === "x") {
+                            countX++;
+                            if(arr[i][j+2] === "x") {
+                                countX++;
+                                break;
+                            }
+                        }
+                        if(arr[i+1][j+1] === "x") {
+                            countX++;
+                            if(arr[i+2][j+2] === "x") {
+                                countX++;
+                                break;
+                            }
+                        }
+                        if(arr[i-1][j+1] === "x") {
+                            countX++;
+                            if(arr[i-2][j+2] === "x") {
+                                countX++;
+                                break;
+                            }
+                        }
+                    } else {
+                        countY = 1;
+                        if(arr[i+1][j] === "o") {
+                            countY++;
+                            if(arr[i+2][j] === "o") {
+                                countY++;
+                                break;
+                            }
+                        }
+                        if(arr[i][j+1] === "o") {
+                            countY++;
+                            if(arr[i][j+2] === "o") {
+                                countY++;
+                                break;
+                            }
+                        }
+                        if(arr[i+1][j+1] === "o") {
+                            countY++;
+                            if(arr[i+2][j+2] === "o") {
+                                countY++;
+                                break;
+                            }
+                        }
+                        if(arr[i-1][j+1] === "o") {
+                            countY++;
+                            if(arr[i-2][j+2] === "o") {
+                                countY++;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            if(countX == 3 || countY == 3) {
+                break;
+            }
+        }
+        if(countX >= 3) {
+            alert("1st player is a Winner");
+        } else if(countY >=3) {
+            alert("2nd player is a Winner");
+        }
+    }
+    play2.disabled = true;
+    function turn(turn) {
+        let x;
+        do {
+            x = Number(prompt("Tọa độ x"));
+        } while(x>num);
+        let y;
+        do {
+            y = Number(prompt("Tọa độ y"));
+        } while(y>num);
+
+        switch (turn) {
+            case 0:
+                while(play(x,y,'x')){
+                    play1.disabled = true;
+                    play2.disabled = false;
+                }
+                break;
+            case 1:
+                while(play(x,y,'o')) {
+                    play1.disabled = false;
+                    play2.disabled = true;
+                }
+                break;
+        }
+        check(turn);
+    }
+
+</script>
+</body>
+</html>
